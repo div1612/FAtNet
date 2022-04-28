@@ -1,6 +1,6 @@
 # Testing StAtNet on VoxCeleb 1-test set using S4 strategy
 
-from DataLoader import DataLoader
+from dataloader import DataLoader
 import utils
 import models
 import time
