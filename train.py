@@ -1,6 +1,6 @@
 from DataLoader import DataLoader
 import utils
-import Models
+import models
 import time
 from tqdm import tqdm
 import numpy as  np
@@ -65,9 +65,9 @@ n_epochs = 350
 
 
 # Define the model
-#model = Models.FAtNet()
+#model = models.FAtNet()
 #model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet_vox2/Models/26__1613044521.3617792.pt")
-model = Models.FAtNet2()
+model = models.FAtNet2()
 model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet2_vox2/Models/1__1615030009.6493034.pt")
 
 # Define the criterion
