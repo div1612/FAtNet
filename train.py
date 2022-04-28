@@ -1,4 +1,4 @@
-from DataLoader import DataLoader
+from dataLoader import DataLoader
 import utils
 import models
 import time
