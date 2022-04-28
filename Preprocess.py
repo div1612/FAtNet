@@ -19,7 +19,7 @@ class RemoveSilence:
 
     
     # ------------ Beginning of remove_silence() method ---------------------------------------------
-    
+    # Reference: https://github.com/ppwwyyxx/speaker-recognition/blob/master/src/data/remove-silence.py
     def remove_silence(self, fs, signal , frame_duration = 0.022,frame_shift = 0.01, perc = 0.02):
 
         orig_dtype = type(signal[0])
