@@ -2,7 +2,7 @@
 
 from DataLoader import DataLoader
 import utils
-import Models
+import models
 import time
 from tqdm import tqdm
 import numpy as  np
@@ -45,9 +45,7 @@ test_y = np.array(test_y)
 batch_size = 1
 print("Batch Size = {}".format(batch_size))
 
-# Model name
-model_name = "StAtNet"    
-print("Model Name = {}".format(model_name))
+
 
 # Load model
 model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet_vox2/Models/38__1613198443.9425883.pt")#60__1612722201.6210203_teacher.pt")#38__1613198443.9425883.pt")
