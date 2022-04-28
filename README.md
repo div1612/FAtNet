@@ -2,7 +2,7 @@
 
 This repository contains the implementation of our paper : FAtNet: Cost-Effective Approach Towards Mitigating the Linguistic Bias in Speaker Verification Systems
 
-This work has been accepted at the Findings of NAACL'22
+This work has been accepted at the ### Findings of NAACL'22
 
 
 If you use this repository, please cite the following paper:
