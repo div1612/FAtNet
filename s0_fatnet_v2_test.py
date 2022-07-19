@@ -1,4 +1,4 @@
-# Testing StAtNet on VoxCeleb 1-test set using S0 strategy
+# Testing FAtNet_v2 using S0 strategy
 
 from dataloader import DataLoader
 import utils
