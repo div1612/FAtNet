@@ -1,4 +1,4 @@
-# Testing StAtNet on VoxCeleb 1-test set using S4 strategy
+# Testing FAtNet_v1 using S1 strategy
 
 from dataloader import DataLoader
 import utils
@@ -48,7 +48,7 @@ print("Batch Size = {}".format(batch_size))
 
 
 # Load model
-model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet_vox2/Models/38__1613198443.9425883.pt")#60__1612722201.6210203_teacher.pt")#38__1613198443.9425883.pt")
+model = torch.load("/home/divyas/Workspace/Vox2Code/Code/Files/Results/FAtNet_vox2/Models/38__1613198443.9425883.pt")#60__1612722201.6210203_teacher.pt")#38__1613198443.9425883.pt")
 model = model.cuda()
 
 #https://github.com/zengchang94622/Speaker_Verification_Tencent/blob/master/inception_with_centloss.py
@@ -64,35 +64,10 @@ def compute_metrics(output_prob, predictions, target):
     
     genuine_match_scores = []
     imposter_match_scores = []
-    
-    accuracy = 0
-    tp = 0
-    tn = 0
-    fp = 0
-    fn = 0
-    precision = 0
-    recall = 0
-    f1 = 0 
-    total = 0
-    
+
     
     for i in tqdm(range(len(target))):
-        
-        if predictions[i]==target[i]:
-            accuracy = accuracy+1
-            
-        if target[i]==1 and predictions[i]==1:
-            tp = tp+1
-            
-        if target[i]==1 and predictions[i]==0:
-            fn = fn+1
-            
-        if target[i]==0 and predictions[i]==0:
-            tn = tn+1
-            
-        if target[i]==0 and predictions[i]==1:
-            fp = fp+1
-            
+                    
         if target[i]==1:
             genuine_match_scores.append(output_prob[i])
         elif target[i]==0:
@@ -100,42 +75,14 @@ def compute_metrics(output_prob, predictions, target):
             
         total = total+1
         
-    accuracy = float(accuracy)/float(total)
-    precision = float(tp)/( float(tp) + float(fp) )
-    recall = float(tp)/( float(tp) + float(fn) )
-    f1 = 2*precision*recall/(precision+recall)
     
     eer_value, threshold = eer(target, output_prob)
     
-    stats = get_eer_stats(genuine_match_scores, imposter_match_scores)
-    generate_eer_report([stats], ['Testing'],'/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNetVox2Train_LibriSpeech_Test_S4/S4_FAtNet_epoch38_Vox_eer_report.csv')
-    export_error_rates(stats.fmr, stats.fnmr, '/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNetVox2Train_LibriSpeech_Test_S4/S4_FAtNet_epoch38Vox_Test_DET.csv')
-    plot_eer_stats([stats], ['Testing'])
-    
-    #dict = {'genuine_match_scores': genuine_match_scores, 'imposter_match_scores': imposter_match_scores}
-    #df = pd.DataFrame(dict) 
-    #df.to_csv('/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNetVox2Train_Voxforge_Test_S3/S3_FAtNet_epoch38_Vox_Test.csv')  
-    
-    print("True Positives : {}".format(tp))
-    print("True Negatives : {}".format(tn))
-    print("False Positives : {}".format(fp))
-    print("False Negatives : {}".format(fn))
-    print("Accuracy : {}".format(accuracy))
-    print("Precision : {}".format(precision))
-    print("Recall : {}".format(recall))
-    print("F1 - Score : {}".format(f1))
     print("Equal Error Rate (EER) : {}".format(eer_value))
     print("EER Threshold : {}".format(threshold))
     
-    
-    with open('/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNetVox2Train_LibriSpeech_Test_S4/S4_FAtNet_epoch38_Test_genuine_match_scores.txt', mode='wt') as gscore:
-        gscore.write('\n'.join(str(line) for line in genuine_match_scores))
+  
 
-    with open('/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNetVox2Train_LibriSpeech_Test_S4/S4_FAtNet_epoch38_Test_imposter_match_scores.txt', mode='wt') as iscore:
-        iscore.write('\n'.join(str(line) for line in imposter_match_scores))
-    
-    
-    
 
 probabilities = []
 predictions = []
@@ -147,10 +94,10 @@ print(len(test_y))
 for i in tqdm((range(0,len(test_y), batch_size))): 
 
     indices = lst[i:i+batch_size]
-    #print(indices)
+
     batch_path_x1  = np.array(test_x1[i])
     batch_path_x2 = np.array(test_x2[i])
-    #batch_test_y = test_y[indices]
+
 
     batch_test_x1 = []
     for path in (batch_path_x1):
@@ -183,21 +130,17 @@ for i in tqdm((range(0,len(test_y), batch_size))):
         embedding, output_prob, features = model(batch_test_x1.cuda(), batch_test_x2.cuda())
         embedding2, output_prob2, features2 = model(batch_test_x2.cuda(), batch_test_x1.cuda())
 
-    #softmax = F.softmax(output_prob)
-    #output_prob.detach()
+
     softmax = torch.exp(output_prob.detach()).cpu()    
     prob = list(softmax.numpy()) #list(softmax.detach().cpu().numpy())
 
     softmax2 = torch.exp(output_prob2.detach()).cpu() 
     prob2 = list(softmax2.numpy())
 
-    #print(prob)
-    #print('After Avg------------------')
-
 
 
     prob.extend(prob2)
-    #print(np.array(prob).shape)
+
     prob = [np.average(prob, axis = 0)]
     prob = np.array(prob)
 
