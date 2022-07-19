@@ -61,27 +61,24 @@ print("Model Name = {}".format(model_name))
 
 
 # Number of epochs to be executed
-n_epochs = 350
+n_epochs = 100
 
 
 # Define the model
-#model = models.FAtNet()
-#model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet_vox2/Models/26__1613044521.3617792.pt")
-model = models.FAtNet2()
-model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet2_vox2/Models/1__1615030009.6493034.pt")
+model = models.FAtNet()
 
 # Define the criterion
 softmaxloss = nn.CrossEntropyLoss()
 centerloss = CenterLoss(2, 1024)
-weight = 1#0.01
+weight = 0.01
 
 # optimzer4nn
-optimizer4nn = optim.Adam(model.parameters(), lr=0.0005, weight_decay=0.00001) #lr=0.005
-scheduler = lr_scheduler.StepLR(optimizer4nn, 10, gamma=0.5) #earlier step was 10
+optimizer4nn = optim.Adam(model.parameters(), lr=0.005, weight_decay=0.00001) 
+scheduler = lr_scheduler.StepLR(optimizer4nn, 10, gamma=0.5) 
 
 # optimzer4center
-optimzer4center = optim.RMSprop(centerloss.parameters(),  lr=0.0005 ) # lr=0.2
-scheduler_center = lr_scheduler.StepLR(optimzer4center, 10, gamma = 0.3) # earlier step was 10
+optimzer4center = optim.RMSprop(centerloss.parameters(),  lr=0.2 ) # lr=0.2
+scheduler_center = lr_scheduler.StepLR(optimzer4center, 10, gamma = 0.3)
 
 # Use GPU
 if torch.cuda.is_available():
@@ -93,7 +90,7 @@ if torch.cuda.is_available():
     
     
 # Loop for epochs
-for epoch in (range(2,n_epochs+1)):
+for epoch in (range(n_epochs)):
     
     torch.cuda.empty_cache()
     
@@ -101,12 +98,7 @@ for epoch in (range(2,n_epochs+1)):
     print("Epoch {}".format(epoch))
     
     model.train()
-    
-
-    #scheduler.step()
         
-
-    #scheduler_center.step()
     
     nn_lr = 0
     for param_group in  optimizer4nn.param_groups:
@@ -247,7 +239,7 @@ for epoch in (range(2,n_epochs+1)):
     
     lst = [str(epoch),  ""+str(float(correct/total)),  str(tp), str(tn) , str(fp) , str(fn) , str(training_softmax_loss), str(training_center_loss), str(training_total_loss), str(nn_lr), str(center_lr) ]
     
-    append_list_as_row('Files/Results/FAtNet2_vox2/TrainingStatisticAttention.csv', lst)
+    append_list_as_row('Files/Results/FAtNet_vox/Training.csv', lst)
     
     
     
@@ -366,8 +358,11 @@ for epoch in (range(2,n_epochs+1)):
     
     lst = [str(epoch),  ""+str(float(correct/total)),  str(tp), str(tn) , str(fp) , str(fn) , str(validation_softmax_loss), str(validation_center_loss), str(validation_total_loss) ]
     
-    append_list_as_row('Files/Results/FAtNet2_vox2/ValidationStatisticAttention.csv', lst)
+    append_list_as_row('Files/Results/FAtNet_vox/Attention.csv', lst)
     
     print("==============================================")
     
-    torch.save(model,"Files/Results/FAtNet2_vox2/Models/"+str(epoch)+"__"+str(time.time())+".pt")
+    torch.save(model,"Files/Results/FAtNet_vox/Models/"+str(epoch)+"__"+str(time.time())+".pt")
+    
+    scheduler.step()     
+    scheduler_center.step()
