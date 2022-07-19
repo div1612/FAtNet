@@ -90,9 +90,7 @@ print("Batch Size = {}".format(batch_size))
 
 
 # Load model
-#model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet2_vox2/Models/32__1615422992.5739744.pt")#60__1612722201.6210203_teacher.pt")#38__1613198443.9425883.pt")
-
-model = torch.load("/home/divyas/Workspace/AT/Vox2Code/Code/Files/Results/FAtNet2_vox2/FAtNet2Vox2epoch_32.pt")
+model = torch.load("/home/divyas/Workspace/Vox2Code/Code/Files/Results/FAtNet2_vox2/FAtNet2Vox2epoch_32.pt")
 model = model.cuda()
 
 #https://github.com/zengchang94622/Speaker_Verification_Tencent/blob/master/inception_with_centloss.py
@@ -126,23 +124,7 @@ def compute_metrics(output_prob, target):
 
     print("Equal Error Rate (EER) : {}".format(eer_value))
     print("EER Threshold : {}".format(threshold))
-    '''
-    stats = get_eer_stats(genuine_match_scores, imposter_match_scores)
-    generate_eer_report([stats], ['Testing'],'/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNet2Vox2Train_Turkish_Test_S5/S5_FAtNet_epoch32_Vox_eer_report.csv')
-    export_error_rates(stats.fmr, stats.fnmr, '/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNet2Vox2Train_Turkish_Test_S5/S5_FAtNet_epoch32Vox_Test_DET.csv')
-    plot_eer_stats([stats], ['Testing'])
-    
-    #dict = {'genuine_match_scores': genuine_match_scores, 'imposter_match_scores': imposter_match_scores}
-    #df = pd.DataFrame(dict) 
-    #df.to_csv('/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNetVox2Train_Turkish_Test_S0/S0_FAtNet_epoch38_Vox_Test.csv')  
-    
-    with open('/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNet2Vox2Train_Turkish_Test_S5/S5_FAtNet_epoch32_Test_genuine_match_scores.txt', mode='wt') as gscore:
-        gscore.write('\n'.join(str(line) for line in genuine_match_scores))
 
-    with open('/home/divyas/Workspace/AT/Vox2Code/Code/Res/Speech_FAtNet2Vox2Train_Turkish_Test_S5/S5_FAtNet_epoch32_Test_imposter_match_scores.txt', mode='wt') as iscore:
-        iscore.write('\n'.join(str(line) for line in imposter_match_scores))
-
-    '''
     
 
 probabilities = []
