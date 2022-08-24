@@ -184,7 +184,7 @@ for epoch in (range(n_epochs)):
         optimizer4nn.zero_grad()
         optimzer4center.zero_grad()
         
-        embedding, output_prob,  discriminative_features1,discriminative_features2 = model(batch_train_x1, batch_train_x2)
+        embedding, output_prob,  discriminative_features1 = model(batch_train_x1, batch_train_x2)
  
         loss1 = softmaxloss(output_prob, batch_train_y)
         loss2 = weight * centerloss(batch_train_y,embedding)
@@ -313,7 +313,7 @@ for epoch in (range(n_epochs)):
             batch_val_y = batch_val_y.cuda()
             
         with torch.no_grad( ) :
-            embedding, output_prob,  discriminative_features1,discriminative_features2 = model(batch_val_x1, batch_val_x2)
+            embedding, output_prob,  discriminative_features1 = model(batch_val_x1, batch_val_x2)
             loss1 = softmaxloss(output_prob, batch_val_y)
             loss2 = weight * centerloss(batch_val_y,embedding)
             loss = loss1 + loss2
